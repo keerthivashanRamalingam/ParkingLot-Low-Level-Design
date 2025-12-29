@@ -5,9 +5,8 @@ import ParkingLot.Constants.TicketsTableConstants;
 import ParkingLot.Constants.VehicleType;
 import ParkingLot.Factories.PaymentFactory;
 import ParkingLot.Payments.*;
-import ParkingLot.Repo.DBMaintainer;
+import ParkingLot.Repo.TicketDao;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.Scanner;
 
@@ -53,7 +52,7 @@ public class ServiceStarter {
     }
 
     public static void collectPaymentInfo(int ticketId) throws Exception {
-        Map<String, Object> ticketRow = DBMaintainer.fetchRow(ticketId);
+        Map<String, Object> ticketRow = TicketDao.fetchRow(ticketId);
         long parkedDurationInMinutes = (System.currentTimeMillis() - Long.parseLong(ticketRow.get(TicketsTableConstants.CREATION_TIME).toString())) / 60000;
         Scanner sc = new Scanner(System.in);
         System.out.println("Select Payment Method: 1. Credit Card 2. Debit Card 3. UPI");

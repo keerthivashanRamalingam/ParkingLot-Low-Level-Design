@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.*;
 
 
-public class DBMaintainer {
+public class TicketDao {
     public static void initializeDB() throws SQLException {
         Connection con = null;
         try {
@@ -92,8 +92,8 @@ public class DBMaintainer {
         try {
             Class.forName("org.postgresql.Driver");
             String url = "jdbc:postgresql://localhost:5432/sasdb";
-            String userName = "";//Add your postgres username
-            String password = "";//Add your postgres password
+            String userName = "postgres";//Add your postgres username
+            String password = "nP2_enwctwBu";//Add your postgres password
             Class.forName("org.postgresql.Driver");
             return DriverManager.getConnection(url, userName, password);
         } catch (Exception e) {

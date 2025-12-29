@@ -6,10 +6,9 @@ import ParkingLot.Constants.VehicleType;
 import ParkingLot.Factories.FloorFactory;
 import ParkingLot.Floors.Floor;
 import ParkingLot.Floors.Slot;
-import ParkingLot.Repo.DBMaintainer;
+import ParkingLot.Repo.TicketDao;
 
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.*;
 
 
@@ -29,7 +28,7 @@ public class MLCP {
 
             MLCPINSATANCE = new MLCP();
         }
-        DBMaintainer.initializeDB();
+        TicketDao.initializeDB();
         return MLCPINSATANCE;
     }
 
@@ -56,7 +55,7 @@ public class MLCP {
         synchronized (this){
             Slot assignedSlot = bookSlot(type);
             if(assignedSlot != null){
-                int ticketId = DBMaintainer.addRow(TicketStatus.ACTIVE.toString(),vehicleNo, type.toString(), type.getFloorNo(), assignedSlot.getSlotNumber());
+                int ticketId = TicketDao.addRow(TicketStatus.ACTIVE.toString(),vehicleNo, type.toString(), type.getFloorNo(), assignedSlot.getSlotNumber());
                 Map<String , Object> rowMap = new HashMap<>();
                 rowMap.put(TicketsTableConstants.TICKET_ID, ticketId);
                 rowMap.put(TicketsTableConstants.VEHICLE_NUMBER, vehicleNo);
@@ -71,13 +70,13 @@ public class MLCP {
 
     public boolean closeTicket(int ticketId) {
         synchronized (this){
-            Map<String, Object> ticketRow = DBMaintainer.fetchRow(ticketId);
+            Map<String, Object> ticketRow = TicketDao.fetchRow(ticketId);
             if(!ticketRow.isEmpty()){
                 Floor floor = getFloorInstance(VehicleType.fetchFlorNo(ticketRow.get(TicketsTableConstants.VEHICLE_TYPE).toString()));
                 assert floor != null;
                 // Free the slot logic to be implemented
                 floor.freeSlot(floor.getAvailableSlot());
-                DBMaintainer.updateStatus(Integer.parseInt(ticketRow.get(TicketsTableConstants.TICKET_ID).toString()), TicketStatus.CLOSED.name());
+                TicketDao.updateStatus(Integer.parseInt(ticketRow.get(TicketsTableConstants.TICKET_ID).toString()), TicketStatus.CLOSED.name());
                 return true; // Ticket closed successfully
             }
             return false; // Ticket ID not found
