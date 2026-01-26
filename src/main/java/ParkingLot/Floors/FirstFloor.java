@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import static ParkingLot.Constants.ParkingConstants.TOTAL_BIKE_SLOTS;
 import static ParkingLot.Constants.ParkingConstants.TOTAL_CAR_SLOTS;
 
 public class FirstFloor implements Floor {
-    Map<Integer, Slot> slotMap;
+    private Map<Integer, Slot> slotMap;
     VehicleType vehicleType;
     private final TreeSet<Integer> availableSlots ;
 
@@ -48,7 +47,7 @@ public class FirstFloor implements Floor {
 
     @Override
     public boolean freeSlot(int slotNumber) {
-        if(slotNumber < 0 || slotNumber >= TOTAL_CAR_SLOTS){
+        if(slotNumber < 1 || slotNumber >= TOTAL_CAR_SLOTS){
             return false;
         }
         slotMap.remove(slotNumber);
@@ -61,4 +60,3 @@ public class FirstFloor implements Floor {
         return !availableSlots.isEmpty();
     }
 }
-

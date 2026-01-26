@@ -33,13 +33,15 @@ public class MLCP {
     }
 
     public static Slot bookSlot(VehicleType type) {
-        Floor floor = getFloorInstance(type.getFloorNo());
-        assert floor != null;
-        if (floor.isSlotAvailable()) {
-            int currentSlot = floor.getAvailableSlot();
-            return floor.occupySlot(currentSlot);
+        synchronized (MLCP.class){
+            Floor floor = getFloorInstance(type.getFloorNo());
+            assert floor != null;
+            if (floor.isSlotAvailable()) {
+                int currentSlot = floor.getAvailableSlot();
+                return floor.occupySlot(currentSlot);
+            }
+            return null;
         }
-        return null;
     }
 
     public static Floor getFloorInstance(int floorNo) {
